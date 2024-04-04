@@ -1,1 +1,1 @@
-# Flask_education
+# Flask_education_seminars

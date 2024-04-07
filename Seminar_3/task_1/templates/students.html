@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Студентики
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="row">
+            {% for student in students %}
+                <p>{{ student.name }} {{ student.last_name }} - {{ student.faculty.name }}</p>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

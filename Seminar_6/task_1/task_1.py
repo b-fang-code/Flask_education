@@ -38,11 +38,14 @@ engine = sqlalchemy.create_engine(DATABASE_URL, connect_args={"check_same_thread
 metadata.create_all(engine)
 
 
-class User(BaseModel):
+class UserIn(BaseModel):
+    username: str = Field(..., max_length=32)
+    email: EmailStr = Field(..., max_length=128)
+    password: str = Field(..., max_length=128)
+
+
+class User(UserIn):
     id: int
-    username: str = Field(max_length=32)
-    email: str = Field(max_length=128)
-    password: str = Field(max_length=128)
 
 
 @app.on_event("startup")
@@ -56,7 +59,7 @@ async def shutdown():
 
 
 @app.post("/users/", response_model=User)
-async def create_user(user: User):
+async def create_user(user: UserIn):
     query = users.insert().values(username=user.username, email=user.email, password=user.password)
     last_record_id = await database.execute(query)
     return {**user.dict(), "id": last_record_id}
